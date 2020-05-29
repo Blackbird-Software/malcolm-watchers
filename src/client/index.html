@@ -2,30 +2,40 @@
 <head>
     <script src="socket.io.js"></script>
     <script>
-        const socket = io('http://localhost:3008', {'pingTimeout': 7000, 'pingInterval': 3000});
+        const socket = io(
+            'http://localhost:3008',
+            {
+                'pingTimeout': 7000,
+                'pingInterval': 3000
+            }
+        );
+
         socket.on('connect', async function () {
             console.log('Connected');
 
             socket.emit('register', {service: 'MOVIES', id: '123'}, function (response) {
-                    console.log('Identity:', response);
+                    console.log('Registered: ', response);
                     return response;
                 }
             );
         });
+
         socket.on('update', async function (data) {
-            console.log('updated', data);
+            console.log('Updated: ', data);
             document.getElementById("counter").innerHTML = data.amount + " connections";
         });
+
         socket.on('exception', function (data) {
             console.log('event', data);
         });
+
         socket.on('disconnect', async function () {
             console.log('Disconnected');
 
-            // socket.emit('deregister', {service: 'MOVIES', id: '123'}, function (response) {
-            //     console.log('Identity:', response);
-            //     return response;
-            // });
+            socket.emit('deregister', {service: 'MOVIES', id: '123'}, function (response) {
+                console.log('Deregistered: ', response);
+                return response;
+            });
         });
     </script>
 </head>

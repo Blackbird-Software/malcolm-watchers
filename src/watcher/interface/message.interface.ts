@@ -1,4 +1,4 @@
-import {ServiceType} from "./service.enum";
+import {ServiceType} from "../enum/service.enum";
 
 export default interface Message {
     readonly service: ServiceType,

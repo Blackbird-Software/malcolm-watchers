@@ -7,8 +7,8 @@ import {
 } from '@nestjs/websockets';
 import {Server, Socket} from 'socket.io';
 import {Logger} from "@nestjs/common";
-import Message from "./message.interface";
 import {SocketsRedis} from "./state/sockets-redis";
+import Message from "./interface/message.interface";
 
 @WebSocketGateway()
 export class WatcherGateway implements OnGatewayConnection, OnGatewayDisconnect {
