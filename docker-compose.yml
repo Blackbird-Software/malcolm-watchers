@@ -1,0 +1,27 @@
+version: '3.5'
+
+networks:
+  malcolm_network:
+    external: true
+
+services:
+  watchers_web:
+    container_name: watchers_web
+    build: .
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - .:/opt/app
+      - /opt/app/node_modules
+    ports:
+      - 3008:3000
+    networks:
+      - malcolm_network
+  watchers_redis:
+    container_name: watchers_redis
+    image: redis:alpine
+    ports:
+      - 6380:6379
+    networks:
+      - malcolm_network

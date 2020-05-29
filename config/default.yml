@@ -1,0 +1,9 @@
+server:
+  port: 3000
+
+redis:
+  host: 'watchers_redis'
+  port: 6379
+
+jwt:
+  expiresIn: 3600
