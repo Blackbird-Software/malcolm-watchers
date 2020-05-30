@@ -5,15 +5,30 @@
         const socket = io(
             'http://localhost:3008',
             {
-                'pingTimeout': 7000,
-                'pingInterval': 3000
+                pingTimeout: 7000,
+                pingInterval: 3000,
+                origin: 'http://localhost:3006',
+                origins: '*:*',
+                cookie: false,
+                transports: ['polling'],
+                transportOptions: {
+                    polling: {
+                        extraHeaders: {
+                            'authorization': 'a',
+                            'user-id': 1233,
+                            'Access-Control-Allow-Origin': '*'
+                        }
+                    }
+                }
             }
         );
 
+        // https://socket.io/docs/client-api/#With-extraHeaders
         socket.on('connect', async function () {
             console.log('Connected');
+            const data = {service: 'MOVIES', id: '00d856d9-cc23-473f-bf5f-7e7b03c2fbed'};
 
-            socket.emit('register', {service: 'MOVIES', id: '123'}, function (response) {
+            socket.emit('register', data, function (response) {
                     console.log('Registered: ', response);
                     return response;
                 }

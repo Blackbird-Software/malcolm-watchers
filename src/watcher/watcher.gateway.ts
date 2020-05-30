@@ -6,9 +6,11 @@ import {
     WebSocketServer,
 } from '@nestjs/websockets';
 import {Server, Socket} from 'socket.io';
-import {Logger} from "@nestjs/common";
+import {Logger, UseGuards} from "@nestjs/common";
 import {SocketsRedis} from "./state/sockets-redis";
 import Message from "./interface/message.interface";
+import {JwtAuthGuard} from "../auth/jwt/jwt.guard";
+import {MessageValidationPipe} from "./pipe/message-validation.pipe";
 
 @WebSocketGateway()
 export class WatcherGateway implements OnGatewayConnection, OnGatewayDisconnect {
@@ -29,9 +31,10 @@ export class WatcherGateway implements OnGatewayConnection, OnGatewayDisconnect 
         this.logger.log(`Client connected: ${client.id}`);
     }
 
+    @UseGuards(JwtAuthGuard)
     @SubscribeMessage('register')
     async register(
-        @MessageBody() data: Message,
+        @MessageBody(MessageValidationPipe) data: Message,
         @ConnectedSocket() socket: Socket
     ): Promise<number> {
         const resourceId = data.id;
